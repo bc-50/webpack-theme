@@ -2,11 +2,12 @@ const path = require("path");
 const webpack = require('webpack');
 const WorkboxPlugin = require('workbox-webpack-plugin');
 const { CleanWebpackPlugin } = require('clean-webpack-plugin');
+const BrowserSyncPlugin = require("browser-sync-webpack-plugin");
 
 module.exports = {
   mode: "development",
   entry: {
-    scripts: "./src/index.js",
+    scripts: "./src/js/index.js",
     styles: "./src/scss/main.scss",
   },
   output: {
@@ -24,6 +25,21 @@ module.exports = {
     new WorkboxPlugin.GenerateSW({
       clientsClaim: true,
       skipWaiting: true,
+    }),
+    new BrowserSyncPlugin({
+      host: "localhost",
+      port: 3000,
+      proxy: "http://localhost/geotech",
+      open: "external",
+      files: [
+        "./*.php",
+        "./shortcodes/visual-composer/*.php",
+        "!./src",
+        "./styles.css",
+        "./dist",
+      ],
+    }, {
+      reload: false,
     }),
   ],
   optimization: {
@@ -67,6 +83,13 @@ module.exports = {
       use: [{
         loader: "html-loader",
       },],
+    },
+    {
+      test: /\.(js|jsx)$/,
+      exclude: /node_modules/,
+      use: {
+        loader: "babel-loader",
+      },
     },
     {
       test: /\.(woff|woff2|eot|ttf|otf)$/,
