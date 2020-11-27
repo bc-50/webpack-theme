@@ -50,3 +50,12 @@ function brace_autoload_shortcodes(){
   { 
       remove_post_type_support('page', 'editor');        
   }
+
+  add_action('acf/init', 'my_acf_op_init');
+  function my_acf_op_init() {
+    if (function_exists('acf_add_options_page')) {
+      if (is_admin()) {
+          acf_add_options_page(array('page_title' => "Theme settings"));
+      }
+    }
+  }
