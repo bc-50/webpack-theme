@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html>
+<html <?php language_attributes() ?>>
 
 <head>
     <meta charset="<?php bloginfo('charset'); ?>" />
@@ -8,9 +8,8 @@
     <?php wp_head(); ?>
 </head>
 
-<body>
+<body <?php body_class() ?>>
 
 <header>
- <button>Click 1</button>
 </header>
 
