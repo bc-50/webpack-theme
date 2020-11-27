@@ -22,10 +22,10 @@ module.exports = {
     new CleanWebpackPlugin({
       cleanOnceBeforeBuildPatterns: ['**/*', '!index.html', '!**/favicon/*', '!**/favicon']
     }),
-    new WorkboxPlugin.GenerateSW({
-      clientsClaim: true,
-      skipWaiting: true,
-    }),
+    // new WorkboxPlugin.GenerateSW({
+    //   clientsClaim: true,
+    //   skipWaiting: true,
+    // }),
     new BrowserSyncPlugin({
       host: "localhost",
       port: 3000,
