@@ -112,14 +112,11 @@ module.exports = {
       'md': {
         'min': '768px'
       },
-      'vc_lg': {
-        'min': '992px'
-      },
       'xl': {
         'min': '1200px'
       },
       'lg': {
-        'min': '1024px'
+        'min': '992px'
       },
       'xxl': {
         'min': '1640px'

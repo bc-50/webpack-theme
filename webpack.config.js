@@ -97,7 +97,11 @@ module.exports = {
     },
     {
       test: /\.(png|svg|jpg|gif)$/,
-      use: ["file-loader"],
+      loader: 'file-loader',
+      options: {
+        name: 'img/[name].[ext]',
+        publicPath: './wp-content/themes/' + path.basename(__dirname) + '/dist/'
+      },
     },
     {
       test: /\.(csv|tsv)$/,
