@@ -25,6 +25,10 @@ module.exports = {
     // new WorkboxPlugin.GenerateSW({
     //   clientsClaim: true,
     //   skipWaiting: true,
+    //   modifyURLPrefix: {
+    //     '': '/wp-content/themes/' + path.basename(__dirname) + '/dist'
+    //   },
+    //   offlineGoogleAnalytics: true
     // }),
     new BrowserSyncPlugin({
       host: "localhost",
