@@ -171,11 +171,14 @@ module.exports = {
       'md': {
         'min': '768px'
       },
+      'lg': {
+        'min': '992px'
+      },
       'xl': {
         'min': '1200px'
       },
-      'lg': {
-        'min': '992px'
+      '2xl': {
+        'min': '1420px'
       },
       'xxl': {
         'min': '1640px'
