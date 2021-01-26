@@ -6,8 +6,6 @@ require_once get_template_directory() . '/inc/class-wp-bootstrap-navwalker.php';
 function theme_files()
 {
   wp_deregister_script('jquery');
-  wp_register_script('jquery', "https://ajax.aspnetcdn.com/ajax/jQuery/jquery-3.3.1.min.js", false, null);
-  wp_enqueue_script('jquery');
   wp_enqueue_script('runtime-Scripts', get_theme_file_uri('dist/runtime.js'), array(), '1.0.0');
   wp_enqueue_script('Main-Styles', get_theme_file_uri('dist/styles.js'));
   wp_enqueue_script('Main-Scripts', get_theme_file_uri('dist/scripts.js'), array(), '1.0.0', true);
@@ -64,3 +62,26 @@ function brace_autoload_shortcodes(){
     return $mimes;
   }
   add_filter('upload_mimes', 'cc_mime_types');
+
+  add_action('wp_head', 'additional_head');
+  function additional_head(){
+    wp_register_script("jquery", site_url('wp-includes/js/jquery/jquery.min.js'), array(), false ,true);
+  }
+  // Force Gravity Forms to init scripts in the footer and ensure that the DOM is loaded before scripts are executed
+  add_filter( 'gform_init_scripts_footer', '__return_true' );
+  add_filter( 'gform_cdata_open', 'wrap_gform_cdata_open', 1 );
+  function wrap_gform_cdata_open( $content = ” ) {
+      if ( ( defined('DOING_AJAX') && DOING_AJAX ) || isset( $_POST['gform_ajax'] ) ) {
+          return $content;
+      }
+      $content = 'document.addEventListener( "DOMContentLoaded", function() { ';
+      return $content;
+  }
+  add_filter( 'gform_cdata_close', 'wrap_gform_cdata_close', 99 );
+  function wrap_gform_cdata_close( $content = '' ) {
+      if ( ( defined('DOING_AJAX') && DOING_AJAX ) || isset( $_POST['gform_ajax'] ) ) {
+          return $content;
+      }
+      $content = ' }, false );';
+      return $content;
+  }

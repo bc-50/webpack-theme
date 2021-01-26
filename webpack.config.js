@@ -11,7 +11,6 @@ module.exports = {
     styles: "./src/scss/main.scss",
   },
   output: {
-    filename: "[name].js",
     path: path.resolve(__dirname, 'dist'),
     publicPath: '/',
   },
@@ -51,7 +50,7 @@ module.exports = {
     usedExports: true,
     splitChunks: {
       cacheGroups: {
-        vendor: {
+        defaultVendors: {
           test: /[\\/]node_modules[\\/]/,
           name: 'vendors',
           chunks: 'all',
