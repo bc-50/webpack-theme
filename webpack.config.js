@@ -3,6 +3,8 @@ const webpack = require('webpack');
 const WorkboxPlugin = require('workbox-webpack-plugin');
 const { CleanWebpackPlugin } = require('clean-webpack-plugin');
 const BrowserSyncPlugin = require("browser-sync-webpack-plugin");
+const MiniCssExtractPlugin = require('mini-css-extract-plugin');
+const CssMinimizerPlugin = require('css-minimizer-webpack-plugin');
 
 module.exports = {
   mode: "development",
@@ -19,7 +21,7 @@ module.exports = {
   },
   plugins: [
     new CleanWebpackPlugin({
-      cleanOnceBeforeBuildPatterns: ['**/*', '!index.html', '!**/favicon/*', '!**/favicon']
+      cleanOnceBeforeBuildPatterns: ['**/*', '!**/favicon/*', '!**/favicon', '!**/imgs/*', '!**/imgs']
     }),
     // new WorkboxPlugin.GenerateSW({
     //   clientsClaim: true,
@@ -29,6 +31,9 @@ module.exports = {
     //   },
     //   offlineGoogleAnalytics: true
     // }),
+    new MiniCssExtractPlugin({
+      filename: '[name].min.css',
+    }),
     new BrowserSyncPlugin({
       host: "localhost",
       port: 3000,
@@ -46,6 +51,8 @@ module.exports = {
     }),
   ],
   optimization: {
+    minimize: true,
+    minimizer: [`...`, new CssMinimizerPlugin()],
     runtimeChunk: 'single',
     usedExports: true,
     splitChunks: {
@@ -63,6 +70,9 @@ module.exports = {
       test: /\.s?css$/,
       use: [{
         loader: "style-loader",
+      },
+      {
+        loader: MiniCssExtractPlugin.loader,
       },
       {
         loader: "css-loader",

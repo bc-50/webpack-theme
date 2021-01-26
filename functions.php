@@ -6,8 +6,8 @@ require_once get_template_directory() . '/inc/class-wp-bootstrap-navwalker.php';
 function theme_files()
 {
   wp_deregister_script('jquery');
-  wp_enqueue_script('runtime-Scripts', get_theme_file_uri('dist/runtime.js'), array(), '1.0.0');
-  wp_enqueue_script('Main-Styles', get_theme_file_uri('dist/styles.js'));
+  wp_enqueue_script('runtime-Scripts', get_theme_file_uri('dist/runtime.js'), array(), '2.0.0');
+  wp_enqueue_style('Main-Styles', get_theme_file_uri('dist/styles.css'));
   wp_enqueue_script('Main-Scripts', get_theme_file_uri('dist/scripts.js'), array(), '1.0.0', true);
   // wp_enqueue_style('Default-Stylesheet', get_stylesheet_uri());
   /* fonts */
@@ -67,6 +67,7 @@ function brace_autoload_shortcodes(){
   function additional_head(){
     wp_register_script("jquery", site_url('wp-includes/js/jquery/jquery.min.js'), array(), false ,true);
   }
+
   // Force Gravity Forms to init scripts in the footer and ensure that the DOM is loaded before scripts are executed
   add_filter( 'gform_init_scripts_footer', '__return_true' );
   add_filter( 'gform_cdata_open', 'wrap_gform_cdata_open', 1 );
@@ -84,4 +85,18 @@ function brace_autoload_shortcodes(){
       }
       $content = ' }, false );';
       return $content;
+  }
+
+  add_filter( 'show_admin_bar', '__return_false' );
+
+  add_action('wp_footer', 'additional_foot');
+  function additional_foot(){ 
+    if (current_user_can('administrator') || is_admin()) {
+    ?>
+    <div class="fixed left-4 bottom-2 flex z-100">
+      <a href="<?php echo esc_url(site_url('wp-admin/')) ?>" class="text-20 rounded-lg font-mont w-full max-w-btn py-3 bg-indigo-600  text-white font-bold text-center px-3 mr-2">Dashboard</a>
+      <a href="<?php echo esc_url(get_edit_post_link()) ?>" class="text-20 rounded-lg font-mont w-full max-w-btn py-3 bg-indigo-600  text-white font-bold text-center px-3">Edit Page</a>
+    </div>
+  <?php
+    }
   }
