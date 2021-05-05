@@ -1,13 +1,15 @@
 const path = require("path");
 const webpack = require('webpack');
-const WorkboxPlugin = require('workbox-webpack-plugin');
+//const WorkboxPlugin = require('workbox-webpack-plugin');
 const { CleanWebpackPlugin } = require('clean-webpack-plugin');
 const BrowserSyncPlugin = require("browser-sync-webpack-plugin");
 const MiniCssExtractPlugin = require('mini-css-extract-plugin');
 const CssMinimizerPlugin = require('css-minimizer-webpack-plugin');
 
 module.exports = {
-  mode: "development",
+  mode: process.env.NODE_ENV,
+  watch: process.env.NODE_ENV == 'development',
+
   entry: {
     scripts: "./src/js/index.js",
     styles: "./src/scss/main.scss",
@@ -17,7 +19,10 @@ module.exports = {
     publicPath: '/',
   },
   devServer: {
-    writeToDisk: true
+    writeToDisk: true,
+    hot: true,
+    contentBase: path.resolve(__dirname, "../../../"),
+    port: 9000,
   },
   plugins: [
     new CleanWebpackPlugin({
@@ -34,13 +39,15 @@ module.exports = {
     new MiniCssExtractPlugin({
       filename: '[name].min.css',
     }),
+    new webpack.HotModuleReplacementPlugin(),
     new BrowserSyncPlugin({
       host: "localhost",
       port: 3000,
-      proxy: "http://localhost/replace_here",
+      proxy: "http://localhost/severnside",
       open: "external",
       files: [
         "./*.php",
+        "./**/*.php",
         "./shortcodes/visual-composer/*.php",
         "!./src",
         "./styles.css",
@@ -73,6 +80,9 @@ module.exports = {
       },
       {
         loader: MiniCssExtractPlugin.loader,
+        options: {
+          esModule: false,
+        }
       },
       {
         loader: "css-loader",
@@ -82,7 +92,7 @@ module.exports = {
         options: {
           postcssOptions: {
             ident: "postcss",
-            plugins: [require("tailwindcss"), require("autoprefixer")],
+            plugins: [require("@tailwindcss/jit"), require("autoprefixer")],
           }
         },
       },
@@ -113,7 +123,7 @@ module.exports = {
       loader: 'file-loader',
       options: {
         name: 'img/[name].[ext]',
-        publicPath: './wp-content/themes/' + path.basename(__dirname) + '/dist/'
+        publicPath: './'
       },
     },
     {
