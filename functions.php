@@ -53,7 +53,7 @@ function brace_autoload_shortcodes(){
   function my_acf_op_init() {
     if (function_exists('acf_add_options_page')) {
       if (is_admin()) {
-          acf_add_options_page(array('page_title' => "Theme settings"));
+          acf_add_options_page(array('page_title' => "Theme Options"));
       }
     }
   }

@@ -235,10 +235,10 @@ module.exports = {
         'min': '1200px'
       },
       '2xl': {
-        'min': '1420px'
+        'min': '1450px'
       },
       'xxl': {
-        'min': '1640px'
+        'min': '1670px'
       },
       'xmm': {
         'max': '469px'
