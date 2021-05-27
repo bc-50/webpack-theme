@@ -43,7 +43,7 @@ module.exports = {
     new BrowserSyncPlugin({
       host: "localhost",
       port: 3000,
-      proxy: "http://localhost/replace_here",
+      proxy: "http://localhost/watt",
       open: "external",
       files: [
         "./*.php",
