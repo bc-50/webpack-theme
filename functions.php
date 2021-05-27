@@ -11,7 +11,7 @@ function theme_files()
   if (file_exists(get_template_directory() . '/dist/vendors.js')) {
     wp_enqueue_script( 'vendors-scripts', get_template_directory_uri() . '/dist/vendors.js', array(), '1.0.0', true );
   }
-  wp_enqueue_style('Main-Styles', get_theme_file_uri('dist/styles.css'));
+  wp_enqueue_style('Main-Styles', get_theme_file_uri('dist/styles.min.css'));
   wp_enqueue_script('Main-Scripts', get_theme_file_uri('dist/scripts.js'), array(), '1.0.0', true);
   // wp_enqueue_style('Default-Stylesheet', get_stylesheet_uri());
   /* fonts */
