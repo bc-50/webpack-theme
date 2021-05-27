@@ -1,6 +1,7 @@
 <?php
 // require_once('inc/custom-post-types.php');
 // require_once('inc/media-libary.php');
+require_once('acf/index.php');
 require_once get_template_directory() . '/inc/class-wp-bootstrap-navwalker.php';
 
 function theme_files()
@@ -11,7 +12,6 @@ function theme_files()
   wp_enqueue_script('Main-Scripts', get_theme_file_uri('dist/scripts.js'), array(), '1.0.0', true);
   // wp_enqueue_style('Default-Stylesheet', get_stylesheet_uri());
   /* fonts */
-  
 }
 
 add_action('wp_enqueue_scripts', 'theme_files');
@@ -37,12 +37,10 @@ function brace_autoload_shortcodes(){
     foreach($files as $file){
         require_once($file);        
     }
-  }
+}
 
   add_action('admin_head', 'remove_content_editor');
-  /**
-   * Remove the content editor from ALL pages 
-   */
+
   function remove_content_editor()
   { 
       remove_post_type_support('page', 'editor');        
@@ -68,25 +66,6 @@ function brace_autoload_shortcodes(){
     wp_register_script("jquery", site_url('wp-includes/js/jquery/jquery.min.js'), array(), false ,true);
   }
 
-  // Force Gravity Forms to init scripts in the footer and ensure that the DOM is loaded before scripts are executed
-  add_filter( 'gform_init_scripts_footer', '__return_true' );
-  add_filter( 'gform_cdata_open', 'wrap_gform_cdata_open', 1 );
-  function wrap_gform_cdata_open( $content = ” ) {
-      if ( ( defined('DOING_AJAX') && DOING_AJAX ) || isset( $_POST['gform_ajax'] ) ) {
-          return $content;
-      }
-      $content = 'document.addEventListener( "DOMContentLoaded", function() { ';
-      return $content;
-  }
-  add_filter( 'gform_cdata_close', 'wrap_gform_cdata_close', 99 );
-  function wrap_gform_cdata_close( $content = '' ) {
-      if ( ( defined('DOING_AJAX') && DOING_AJAX ) || isset( $_POST['gform_ajax'] ) ) {
-          return $content;
-      }
-      $content = ' }, false );';
-      return $content;
-  }
-
   add_filter( 'show_admin_bar', '__return_false' );
 
   add_action('wp_footer', 'additional_foot');
@@ -100,3 +79,56 @@ function brace_autoload_shortcodes(){
   <?php
     }
   }
+
+  function format_content($content){
+    $li = empty($li) ? 'list-disc' : $li;
+    $the_content = wpautop($content, false);
+    //$the_content = str_replace("<p", "<p class=\"text-16 tracking-slight-tight leading-6 mb-8 last:mb-0\"", $the_content);
+    // $the_content = str_replace("<strong", "<strong class=\"font-bold\"", $the_content);
+    // $the_content = str_replace("<a", "<a class=\"font-bold transition-all duration-300 ease-linear hover:opacity-60\"", $the_content);
+    // $the_content = str_replace("<em", "<em class=\"italic\"", $the_content);
+    // $the_content = str_replace("<h3", "<h3 class=\"uppercase text-green-default font-bold tracking-2xl leading-6\"", $the_content);
+    // $the_content = str_replace("<blockquote", "<blockquote class=\"uppercase tracking-2xl font-bold\"", $the_content);
+    // $the_content = preg_replace("(<h(1|2|4|5|6))","<h2 class=\"text-28 leading-4 mt-4 mb-2 font-fave-script text-green-default\"", $the_content);
+    // $the_content = preg_replace("(</h(1|2|4|5|6)>)","</h2>", $the_content);
+    //$the_content = str_replace("<li","<li class=\"text-16 leading-4 ". $li ." mb-4 last:mb-0\"", $the_content);
+    //$the_content = str_replace("<ul", "<ul class=\"pl-[10px]\"", $the_content);
+    // $the_content = str_replace("<p class=\"text-16 mb-7 last:mb-0\">&nbsp;</p>", "<p class=\"text-16 mb-0\">&nbsp;</p>", $the_content);
+  
+    return $the_content;
+}
+
+function update_safelist($block_classes = ""){
+  if ($_SERVER["HTTP_HOST"] == "localhost" && !empty($block_classes)) {
+    $path = get_stylesheet_directory_uri();
+    $path = str_replace(site_url(), "", $path);
+    $path = str_replace("/", "\\", $path);
+    $filename = getcwd() . $path . '\safelist.php';
+    $myfile = fopen($filename, "a+");
+    $size = filesize($filename);
+    $should_writeto = false;
+    $writeto = "";
+    if ($size > 0) {
+      $contents = fread($myfile, $size);
+      $block_split = explode(" ", $block_classes);
+      $list_split = explode(" ", $contents);
+      foreach ($block_split as $s_block) {
+        $in = true;
+        foreach ($list_split as $s_list) {
+          if ($s_block == $s_list) {
+            $in = false;
+            break;
+          }
+        }
+        if ($in) {
+          $writeto .= ' ' . $s_block;
+          $should_writeto = true;
+        }
+      }
+      if ($should_writeto) {
+        fwrite($myfile, $writeto);
+      }
+    }
+    fclose($myfile);
+  }
+}
