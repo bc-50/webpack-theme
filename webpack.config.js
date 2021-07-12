@@ -39,11 +39,11 @@ module.exports = {
     new MiniCssExtractPlugin({
       filename: '[name].min.css',
     }),
-    new webpack.HotModuleReplacementPlugin(),
+    //new webpack.HotModuleReplacementPlugin(),
     new BrowserSyncPlugin({
       host: "localhost",
       port: 3000,
-      proxy: "http://localhost/watt",
+      proxy: "http://localhost/bodycare",
       open: "external",
       files: [
         "./*.php",
@@ -92,7 +92,7 @@ module.exports = {
         options: {
           postcssOptions: {
             ident: "postcss",
-            plugins: [require("@tailwindcss/jit"), require("autoprefixer")],
+            plugins: [require("tailwindcss"), require("autoprefixer")],
           }
         },
       },

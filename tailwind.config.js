@@ -1,8 +1,7 @@
 module.exports = {
-
+  mode: 'jit',
   purge: {
     // enabled: false,
-    mode: 'jit',
     // layers: ['base', 'components', 'utilities'],
     content: [
       './src/**/*.js',
