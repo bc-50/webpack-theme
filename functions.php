@@ -101,37 +101,11 @@ function brace_autoload_shortcodes(){
     return $the_content;
 }
 
-function update_safelist($block_classes = ""){
-  if ($_SERVER["HTTP_HOST"] == "localhost" && !empty($block_classes)) {
-    $path = get_stylesheet_directory_uri();
-    $path = str_replace(site_url(), "", $path);
-    $path = str_replace("/", "\\", $path);
-    $filename = getcwd() . $path . '\safelist.php';
-    $myfile = fopen($filename, "a+");
-    $size = filesize($filename);
-    $should_writeto = false;
-    $writeto = "";
-    if ($size > 0) {
-      $contents = fread($myfile, $size);
-      $block_split = explode(" ", $block_classes);
-      $list_split = explode(" ", $contents);
-      foreach ($block_split as $s_block) {
-        $in = true;
-        foreach ($list_split as $s_list) {
-          if ($s_block == $s_list) {
-            $in = false;
-            break;
-          }
-        }
-        if ($in) {
-          $writeto .= ' ' . $s_block;
-          $should_writeto = true;
-        }
-      }
-      if ($should_writeto) {
-        fwrite($myfile, $writeto);
-      }
-    }
-    fclose($myfile);
-  }
+function get_image_path($id, $size = "full"){
+  $path = wp_get_original_image_path($id);
+  $url = wp_get_attachment_image_url($id, $size);
+  $end = str_replace(site_url('/'), "", $url);
+  $path_arr = explode('wp-content', $path);
+  $start = $path_arr[0];
+  return $start . $end;
 }
